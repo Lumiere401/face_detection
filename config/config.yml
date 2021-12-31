@@ -1,0 +1,12 @@
+mode : 'train'
+output_path : 'results/'
+
+steps : 100
+milestones : [40, 70]
+base_learning_rate : 0.002
+weight_decay : 1e-4
+auto_resume_training_from_lastest_steps : False
+max_save_model_num : 1
+total_train_epochs : 50
+pid_num : 4
+margin : 0.3

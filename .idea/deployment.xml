@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" autoUpload="Always" serverName="l@222.197.219.10:9022" remoteFilesAllowedToDisappearOnAutoupload="false">
+    <serverData>
+      <paths name="l@222.197.219.10:9022">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/l/txn/face_detection" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
+  </component>
+</project>
