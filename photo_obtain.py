@@ -1,12 +1,25 @@
 import cv2
 import os
+import pandas as pd
+
+def GeneLabelFile(path):
+    folder = os.listdir(path)
+    names = [item for item in folder if os.path.isdir(os.path.join(path, item))]
+    id = 0
+
+    # 标签文件生成
+    dict = {'name': names, 'label': range(len(names))}
+    df = pd.DataFrame(dict)
+    df.to_csv(os.path.join(path, 'person.csv'))
+
 def CatchPICFromVideo(window_name, camera_idx, catch_pic_num, path_name):
     cv2.namedWindow(window_name)
     # 视频来源，可以来自一段已存好的视频，也可以直接来自USB摄像头
-    cap = cv2.VideoCapture(camera_idx)
+    cap = cv2.VideoCapture(camera_idx, apiPreference=cv2.CAP_AVFOUNDATION)
+    cap.set(cv2.CAP_PROP_FPS, 30)  # Set a target FPS (e.g., 30 FPS)
 
     # 告诉OpenCV使用人脸识别分类器
-    data_path = "/opt/anaconda3/envs/pytorch1.8/lib/python3.6/site-packages/cv2/data/haarcascade_frontalface_default.xml"
+    data_path = "./haarcascades/haarcascade_frontalface_alt.xml"
     classfier = cv2.CascadeClassifier(data_path)
 
     # 识别出人脸后要画的边框的颜色，RGB格式
@@ -14,6 +27,7 @@ def CatchPICFromVideo(window_name, camera_idx, catch_pic_num, path_name):
 
     num = 0
     while cap.isOpened():
+        print("camera opened")
         ok, frame = cap.read()  # 读取一帧数据
         if not ok:
             break
@@ -29,7 +43,7 @@ def CatchPICFromVideo(window_name, camera_idx, catch_pic_num, path_name):
                 if not os.path.exists(path_name):
                     os.makedirs(path_name)
 
-                img_name = '%s/%d.jpg ' % (path_name, num)
+                img_name = '%s/%d.jpg' % (path_name, num)
                 image = frame[y - 10: y + h + 10, x - 10: x + w + 10]
                 cv2.imwrite(img_name, image)
                 num += 1
@@ -49,8 +63,8 @@ def CatchPICFromVideo(window_name, camera_idx, catch_pic_num, path_name):
 
         # 显示图像
         cv2.imshow(window_name, frame)
-        c = cv2.waitKey(10)
-        if c & 0xFF == ord('q'):
+        # Exit on 'q' key press
+        if cv2.waitKey(10) & 0xFF == ord('q'):
             break
     # 释放摄像头并销毁所有窗口
     cap.release()
@@ -60,6 +74,7 @@ def CatchPICFromVideo(window_name, camera_idx, catch_pic_num, path_name):
 if __name__ == '__main__':
     window_name = 'win1'
     camare_id = 0
-    pic_num = 200   #采样人脸图片数目
-    path = '/Users/apple/PycharmProjects/face_detect/data/txn'  ##更改保存路径
+    pic_num = 100   #采样人脸图片数目
+    path = './data/txn2'  ##更改保存路径
     CatchPICFromVideo(window_name, camare_id, pic_num, path)
+    GeneLabelFile('./data')

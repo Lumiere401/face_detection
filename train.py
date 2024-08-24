@@ -64,18 +64,22 @@ def main(cfg):
 
 
 
-def _load_images_path(folder_dir):
+def _load_images_path(folder_dir, label_file):
     '''
-    :param folder_dir:
+    :param 
+    folder_dir: images folder
+    label_file: csv file that includes names and index
     :return: [(path, identiti_id, camera_id)]
     '''
     samples = []
-    for root_path, _, files_name in os.walk(folder_dir):
-        for file_name in files_name:
-            if '.jpg' in file_name:
-                identi_id = int(file_name.split('.')[0].split('_')[-1])
-                full_path = root_path + os.sep + file_name
-                samples.append([full_path, identi_id])
+    for file_name in os.listdir(folder_dir):
+        if ('.csv' not in file_name):
+            identi_id = label_file.loc[label_file['name'] == os.path.basename(file_name), 'label'].values
+            for image_name in os.listdir(os.path.join(folder_dir, file_name)):
+                if '.jpg' in image_name:
+                    full_path = folder_dir + os.sep + file_name + os.sep + image_name
+                    samples.append([full_path, identi_id])
+                
     return samples
 
 class FaceDetectDataset(Dataset):
@@ -90,7 +94,7 @@ class FaceDetectDataset(Dataset):
         self.landmarks_frame = pd.read_csv(csv_file)
         self.root_dir = root_dir
         self.transform = transform
-        self.dataset = _load_images_path(self.root_dir)
+        self.dataset = _load_images_path(self.root_dir, self.landmarks_frame)
 
     def __len__(self):
         return len(self.dataset)
@@ -126,7 +130,7 @@ if __name__ == '__main__':
     parser.add_argument('--input_PIXEL_STD', default=[0.229, 0.224, 0.225])
 
     args = parser.parse_args()
-    args = parser.parse_args()
+
     if args.config_file != "":
         cfg.merge_from_file(args.config_file)
 

@@ -3,7 +3,7 @@ import cv2
 img = cv2.imread('./data/txn.JPG')
 gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
 
-face_cascade = cv2.CascadeClassifier('/home/l/miniconda3/envs/pytorch1.8/lib/python3.6/site-packages/cv2/data/haarcascade_frontalface_default.xml')
+face_cascade = cv2.CascadeClassifier()
 
 # 探测图片中的人脸
 

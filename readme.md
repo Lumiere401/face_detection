@@ -1,9 +1,10 @@
 #简单的人脸检测/识别demo
-
-1. 需要先通过`photo_obtain` 采集人脸数据集，需要手动更改路径
-2. 使用`img_rename`讲 `data` 下的数据集图片名称修改为标签格式
-3. `person.csv` 下添加对应标签和人名的对应
-4. 开始训练
+# A simple and easy-to-used face detection and recognition demo
+ 
+1. 安装环境 `pip install -r requirements.txt`
+2. 需要先通过`photo_obtain` 采集人脸数据集，需要手动更改路径
+3. 开始训练 `train.py`
+4. 开始测试 `test.py`
 
 
 
